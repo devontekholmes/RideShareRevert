@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using RideShare.DAL;
+using System.Web.Http.Cors;
 
 namespace RideShareWebAPI.Controllers
 {
@@ -17,12 +18,14 @@ namespace RideShareWebAPI.Controllers
     {
         private RideShareDBEntities db = new RideShareDBEntities();
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // GET: api/Drivers
         public IQueryable<Driver> GetDrivers()
         {
             return db.Drivers;
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // GET: api/Drivers/5
         [ResponseType(typeof(Driver))]
         public async Task<IHttpActionResult> GetDriver(int id)
@@ -36,6 +39,7 @@ namespace RideShareWebAPI.Controllers
             return Ok(driver);
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // PUT: api/Drivers/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutDriver(int id, Driver driver)
@@ -71,6 +75,7 @@ namespace RideShareWebAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // POST: api/Drivers
         [ResponseType(typeof(Driver))]
         public async Task<IHttpActionResult> PostDriver(Driver driver)
@@ -86,6 +91,7 @@ namespace RideShareWebAPI.Controllers
             return CreatedAtRoute("DefaultApi", new { id = driver.DriverId }, driver);
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // DELETE: api/Drivers/5
         [ResponseType(typeof(Driver))]
         public async Task<IHttpActionResult> DeleteDriver(int id)

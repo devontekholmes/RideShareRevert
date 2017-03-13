@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DM = RideShareWebAPI.Models;
 using RideShare.DAL;
+using System.Web.Http.Cors;
 
 namespace RideShareWebAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace RideShareWebAPI.Controllers
     {
         private RideShareDBEntities db = new RideShareDBEntities();
 
+        [EnableCors(origins:"*", headers:"*", methods:"*")]
         // GET: api/Customers
         public IEnumerable<DM.Customer> GetCustomers()
         {
@@ -31,6 +33,7 @@ namespace RideShareWebAPI.Controllers
             return customer;
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // GET: api/Customers/5
         [ResponseType(typeof(Customer))]
         public async Task<IHttpActionResult> GetCustomer(string id)
@@ -44,6 +47,7 @@ namespace RideShareWebAPI.Controllers
             return Ok(customer);
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // PUT: api/Customers/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutCustomer(string id, Customer customer)
@@ -79,6 +83,7 @@ namespace RideShareWebAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // POST: api/Customers
         [ResponseType(typeof(Customer))]
         public async Task<IHttpActionResult> PostCustomer(Customer customer)
@@ -109,6 +114,7 @@ namespace RideShareWebAPI.Controllers
             return CreatedAtRoute("DefaultApi", new { id = customer.Email }, customer);
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         // DELETE: api/Customers/5
         [ResponseType(typeof(Customer))]
         public async Task<IHttpActionResult> DeleteCustomer(string id)
