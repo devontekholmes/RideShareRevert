@@ -1,0 +1,30 @@
+﻿<html>
+    <header>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
+    </header>
+<style>
+    table, tr, td, th {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+    }
+</style>
+<h2>Welcome To RideShare</h2>
+<body data-ng-app="APIModule">
+    <center><span><img src="RRRideShare.jpg" class="img-circle" alt="Icon" /></span></center>
+    <h3> Catch A Ride! Login as a Member </h3>
+        <form action="submit">
+            <label for="Email">Email:    </label> <input ng-model="Email" type="text" name = "Email" required/> <br/>
+            <label for="Password">Password: </label> <input ng-model="Pword" type="text" name = "Password" required/> <br/>
+            <input type="submit" value = "Login" class=""/> 
+        </form>
+    <div id="tblSubs" ng-controller="APIController">
+        
+    </div>
+<script src="../Scripts/angular.js"></script>
+<script src="../Scripts/angular-route.js"></script>
+<script src="../Scripts/APIScripts/Module.js"></script>
+<script src="../Scripts/APIScripts/Service.js"></script>
+<script src="../Scripts/APIScripts/Controller.js"></script>   
+</body>
+</html>

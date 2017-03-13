@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RideShareDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="LicensePlateNo" />
+          </Key>
+          <Property Name="LicensePlateNo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Model" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Brand" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PhoneNo" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CreditCardNo" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="XCoordinate" Type="float" Nullable="false" />
+          <Property Name="YCoordinate" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="DriverId" />
+          </Key>
+          <Property Name="DriverId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LicensePlateNo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Rating" Type="float" Nullable="false" />
+          <Property Name="XCoordinate" Type="float" />
+          <Property Name="YCoordinate" Type="float" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'RideShareDB.dbo.RideInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="RideInfo">
+          <Key>
+            <PropertyRef Name="DriverId" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="DriverId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Driver_LicensePlateNo">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="Driver" Type="Self.Driver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="LicensePlateNo" />
+            </Principal>
+            <Dependent Role="Driver">
+              <PropertyRef Name="LicensePlateNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RideInfo_CustomerId">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="RideInfo" Type="Self.RideInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="RideInfo">
+              <PropertyRef Name="Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RideInfo_DriverId">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
+          <End Role="RideInfo" Type="Self.RideInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="DriverId" />
+            </Principal>
+            <Dependent Role="RideInfo">
+              <PropertyRef Name="DriverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GetCoordinates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerEmail" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetCoordinatesDriver" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DriverId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="RideShareDBModelStoreContainer">
+          <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Driver" EntityType="Self.Driver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RideInfo" EntityType="Self.RideInfo" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [RideInfo].[DriverId] AS [DriverId], 
+    [RideInfo].[Email] AS [Email], 
+    [RideInfo].[Time] AS [Time]
+    FROM [dbo].[RideInfo] AS [RideInfo]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Driver_LicensePlateNo" Association="Self.FK_Driver_LicensePlateNo">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="Driver" EntitySet="Driver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RideInfo_CustomerId" Association="Self.FK_RideInfo_CustomerId">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="RideInfo" EntitySet="RideInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RideInfo_DriverId" Association="Self.FK_RideInfo_DriverId">
+            <End Role="Driver" EntitySet="Driver" />
+            <End Role="RideInfo" EntitySet="RideInfo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RideShareDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Car">
+          <Key>
+            <PropertyRef Name="LicensePlateNo" />
+          </Key>
+          <Property Name="LicensePlateNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Model" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Brand" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Drivers" Relationship="Self.FK_Driver_LicensePlateNo" FromRole="Car" ToRole="Driver" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreditCardNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="XCoordinate" Type="Double" Nullable="false" />
+          <Property Name="YCoordinate" Type="Double" Nullable="false" />
+          <NavigationProperty Name="RideInfoes" Relationship="Self.FK_RideInfo_CustomerId" FromRole="Customer" ToRole="RideInfo" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="DriverId" />
+          </Key>
+          <Property Name="DriverId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LicensePlateNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Rating" Type="Double" Nullable="false" />
+          <Property Name="XCoordinate" Type="Double" />
+          <Property Name="YCoordinate" Type="Double" />
+          <NavigationProperty Name="Car" Relationship="Self.FK_Driver_LicensePlateNo" FromRole="Driver" ToRole="Car" />
+          <NavigationProperty Name="RideInfoes" Relationship="Self.FK_RideInfo_DriverId" FromRole="Driver" ToRole="RideInfo" />
+        </EntityType>
+        <EntityType Name="RideInfo">
+          <Key>
+            <PropertyRef Name="DriverId" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="DriverId" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_RideInfo_CustomerId" FromRole="RideInfo" ToRole="Customer" />
+          <NavigationProperty Name="Driver" Relationship="Self.FK_RideInfo_DriverId" FromRole="RideInfo" ToRole="Driver" />
+        </EntityType>
+        <Association Name="FK_Driver_LicensePlateNo">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="Driver" Type="Self.Driver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="LicensePlateNo" />
+            </Principal>
+            <Dependent Role="Driver">
+              <PropertyRef Name="LicensePlateNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RideInfo_CustomerId">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="RideInfo" Type="Self.RideInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="RideInfo">
+              <PropertyRef Name="Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RideInfo_DriverId">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
+          <End Role="RideInfo" Type="Self.RideInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="DriverId" />
+            </Principal>
+            <Dependent Role="RideInfo">
+              <PropertyRef Name="DriverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RideShareDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cars" EntityType="Self.Car" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Drivers" EntityType="Self.Driver" />
+          <EntitySet Name="RideInfoes" EntityType="Self.RideInfo" />
+          <AssociationSet Name="FK_Driver_LicensePlateNo" Association="Self.FK_Driver_LicensePlateNo">
+            <End Role="Car" EntitySet="Cars" />
+            <End Role="Driver" EntitySet="Drivers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RideInfo_CustomerId" Association="Self.FK_RideInfo_CustomerId">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="RideInfo" EntitySet="RideInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RideInfo_DriverId" Association="Self.FK_RideInfo_DriverId">
+            <End Role="Driver" EntitySet="Drivers" />
+            <End Role="RideInfo" EntitySet="RideInfoes" />
+          </AssociationSet>
+          <FunctionImport Name="GetCoordinates" ReturnType="Collection(RideShareDBModel.GetCoordinates_Result)">
+            <Parameter Name="CustomerEmail" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetCoordinatesDriver" ReturnType="Collection(RideShareDBModel.GetCoordinatesDriver_Result)">
+            <Parameter Name="DriverId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetCoordinates_Result">
+          <Property Type="Double" Name="XCoordinate" Nullable="false" />
+          <Property Type="Double" Name="YCoordinate" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetCoordinatesDriver_Result">
+          <Property Type="Double" Name="XCoordinate" Nullable="true" />
+          <Property Type="Double" Name="YCoordinate" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RideShareDBModelStoreContainer" CdmEntityContainer="RideShareDBEntities">
+          <EntitySetMapping Name="Cars">
+            <EntityTypeMapping TypeName="RideShareDBModel.Car">
+              <MappingFragment StoreEntitySet="Car">
+                <ScalarProperty Name="LicensePlateNo" ColumnName="LicensePlateNo" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="RideShareDBModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="CreditCardNo" ColumnName="CreditCardNo" />
+                <ScalarProperty Name="XCoordinate" ColumnName="XCoordinate" />
+                <ScalarProperty Name="YCoordinate" ColumnName="YCoordinate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Drivers">
+            <EntityTypeMapping TypeName="RideShareDBModel.Driver">
+              <MappingFragment StoreEntitySet="Driver">
+                <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+                <ScalarProperty Name="LicensePlateNo" ColumnName="LicensePlateNo" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="XCoordinate" ColumnName="XCoordinate" />
+                <ScalarProperty Name="YCoordinate" ColumnName="YCoordinate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RideInfoes">
+            <EntityTypeMapping TypeName="RideShareDBModel.RideInfo">
+              <MappingFragment StoreEntitySet="RideInfo">
+                <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetCoordinates" FunctionName="RideShareDBModel.Store.GetCoordinates">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RideShareDBModel.GetCoordinates_Result">
+                <ScalarProperty Name="XCoordinate" ColumnName="XCoordinate" />
+                <ScalarProperty Name="YCoordinate" ColumnName="YCoordinate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetCoordinatesDriver" FunctionName="RideShareDBModel.Store.GetCoordinatesDriver">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RideShareDBModel.GetCoordinatesDriver_Result">
+                <ScalarProperty Name="XCoordinate" ColumnName="XCoordinate" />
+                <ScalarProperty Name="YCoordinate" ColumnName="YCoordinate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
