@@ -10,3 +10,19 @@
         })
     }
 })
+
+app.controller('customerController', function($scope){
+
+})
+
+app.controller('driverController', function($scope){
+
+})
+
+app.controller('rideStatusController', function($scope){
+
+})
+
+app.controller('aboutController', function($scope){
+
+})

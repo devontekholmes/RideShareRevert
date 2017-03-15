@@ -1,26 +1,42 @@
 ﻿<html>
     <header>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
+    <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="index.html">Home</a></li>
+        <li role="presentation"><a href="customer.html">Customer</a></li>
+        <li role="presentation"><a href="driver.html">Driver</a></li>
+        <li role="presentation"><a href="about.html">About RideShare </a></li>
+        <li role="presentation"><a href="rideStatus.html">Check Your Ride Status </a></li>
+    </ul>
     </header>
+
 <style>
+    h3 {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
     table, tr, td, th {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
     }
 </style>
-<h2>Welcome To RideShare</h2>
+
+<div class="jumbotron"><center> <h3>Welcome To RideShare!</h3> <center></div>
 <body data-ng-app="APIModule">
-    <center><span><img src="RRRideShare.jpg" class="img-circle" alt="Icon" /></span></center>
-    <h3> Catch A Ride! Login as a Member </h3>
+    <div ng-controller="APIController">
+    <div class="container" style="height:500ox; width:300px">
+    <span class="container"><img src="RRRideShare.jpg" class="img-responsive" alt="Icon" />
+    <img src="happydrive.jpg" class="img-responsive" alt="Icon" /></span>
+    <h3> Catch A Ride! Login as a Member Today!</h3>
         <form action="submit">
             <label for="Email">Email:    </label> <input ng-model="Email" type="text" name = "Email" required/> <br/>
             <label for="Password">Password: </label> <input ng-model="Pword" type="text" name = "Password" required/> <br/>
             <input type="submit" value = "Login" class=""/> 
         </form>
-    <div id="tblSubs" ng-controller="APIController">
-        
     </div>
+        <center><p>&copy; Copyright 2017 VonDerik</p></center>
+    </div>
+
 <script src="../Scripts/angular.js"></script>
 <script src="../Scripts/angular-route.js"></script>
 <script src="../Scripts/APIScripts/Module.js"></script>
